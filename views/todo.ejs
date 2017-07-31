@@ -53,10 +53,12 @@
                 $('#todo-list').append(`<li id="${todo.id}" class="list-group-item"><button class="btn" onclick="deleteTodo('${todo.id}')">✘</button> ${todo.text}</li>`)
             });
 
-            socket.on('deleted-todo', (id)=>{
+            socket.on('deleted-todo', (id) => {
                 $(`#todo-list >li#${id}`).remove()
+
                 if ($(`#todo-list >li`).length === 0) {
                     $('#todo-list').append('<li id="empty" class="list-group-item">Empty</li>')
+                    socket.emit('empty-todos')
                 }
             })
             

@@ -89,6 +89,10 @@ io.sockets.on('connection', (socket) => {
         }
         io.emit('deleted-todo', id)
     })
+
+    socket.on('empty-todos', () => {
+        session.todos = []
+    })
 })
 
 server.listen(port, () => {
