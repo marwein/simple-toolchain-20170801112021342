@@ -5,6 +5,7 @@ dotenv.load()
 
 const express = require('express')
 const ent = require('ent')
+const path = require('path')
 const uuid = require('uuid/v4')
 const morgan = require('morgan')
 const session = require('cookie-session')
@@ -20,7 +21,7 @@ session.todos = []
 
 // Logs en dans la console du serveur
 app.use(morgan('combined'))
-
+app.use(express.static(path.join(__dirname, './public')));
 /* On utilise les sessions */
 app.use(session({ secret: 'PJlbnH8W1Orgo1DHv0i8tZxxRMFJacXr' }))
 
