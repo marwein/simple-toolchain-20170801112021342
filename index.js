@@ -42,22 +42,6 @@ on en crée une vide sous forme d'array avant la suite */
     })
 })
 
-/* On ajoute un élément à la todolist */
-.post('/todo/ajouter/', urlencodedParser, (req, res) => {
-    if (req.body.newtodo !== '') {
-        req.session.todos.push(req.body.newtodo)
-    }
-    res.redirect('/todo')
-})
-
-/* Supprime un élément de la todolist */
-.get('/todo/supprimer/:id', (req, res) => {
-    if (req.params.id !== '') {
-        req.session.todos.splice(req.params.id, 1)
-    }
-    res.redirect('/todo')
-})
-
 // Quand un client se connecte, on le note dans la console
 io.sockets.on('connection', (socket) => {
     socket.emit('new-client', lastTodo)
