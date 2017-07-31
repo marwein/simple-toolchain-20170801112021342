@@ -22,8 +22,9 @@ Je vous laisse decouvrir un peu cette synthaxe que je vous conseille fortement Ã
 
 ## Execution du projet
 Apres avoir telecharger les source et dezippeer, vous vous positionnez dans le repertoire du projet et vous executez la commande suivante :
-
-    $ npm install 
+```sh
+$ npm install 
+```
 
 ## Lancer l'application:
 
