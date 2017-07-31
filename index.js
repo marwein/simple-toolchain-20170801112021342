@@ -82,7 +82,7 @@ io.sockets.on('connection', (socket) => {
         while (i--) {
             if (session.todos[i] &&
                 session.todos[i].hasOwnProperty('id') &&
-                (arguments.length > 2 && session.todos[i]['id'] === id)
+                (arguments.length > 2 && session.todos[i].id === id)
             ) {
                 session.todos.splice(i, 1)
             }
