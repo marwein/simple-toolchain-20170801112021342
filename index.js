@@ -8,8 +8,6 @@ const ent = require('ent')
 const uuid = require('uuid/v4')
 const morgan = require('morgan')
 const session = require('cookie-session')
-const bodyParser = require('body-parser')
-const urlencodedParser = bodyParser.urlencoded({ extended: false })
 const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io').listen(server)
@@ -17,9 +15,11 @@ const port = process.env.PORT
 
 let lastTodo = null
 
+//Initialisation de la liste todo du serveur
 session.todos = []
 
-app.use(morgan('dev'))
+// Logs en dans la console du serveur
+app.use(morgan('combined'))
 
 /* On utilise les sessions */
 app.use(session({ secret: 'PJlbnH8W1Orgo1DHv0i8tZxxRMFJacXr' }))
@@ -42,7 +42,7 @@ on en crée une vide sous forme d'array avant la suite */
     })
 })
 
-// Quand un client se connecte, on le note dans la console
+
 io.sockets.on('connection', (socket) => {
     socket.emit('new-client', lastTodo)
 
