@@ -17,6 +17,8 @@ const port = process.env.PORT
 
 let lastTodo = null
 
+session.todos = []
+
 app.use(morgan('dev'))
 
 /* On utilise les sessions */
@@ -56,20 +58,13 @@ on en crée une vide sous forme d'array avant la suite */
     res.redirect('/todo')
 })
 
-// Chargement de socket.io
-
 // Quand un client se connecte, on le note dans la console
 io.sockets.on('connection', (socket) => {
-    if (lastTodo !== null) {
-        console.log({
-            lastTodo: {
-                content: lastTodo.text,
-                id: lastTodo.id
-            }
-        })
-    }
-
     socket.emit('new-client', lastTodo)
+
+    socket.on('new-client', (todo) => {
+        session.todos = [todo]
+    })
 
     socket.on('new-todo', (todo) => {
         var id = uuid()
@@ -78,17 +73,20 @@ io.sockets.on('connection', (socket) => {
             text: todo,
             id: id
         }
-        console.log({
-            lastTodo: {
-                text: lastTodo.text,
-                id: lastTodo.id
-            }
-        })
+        session.todos.push(lastTodo)
         io.emit('new-added-todo', lastTodo)
     })
 
     socket.on('delete-todo', (id) => {
-        console.log('delete : ', { id: id })
+        var i = session.todos.length
+        while (i--) {
+            if (session.todos[i] &&
+                session.todos[i].hasOwnProperty('id') &&
+                (arguments.length > 2 && session.todos[i]['id'] === id)
+            ) {
+                session.todos.splice(i, 1)
+            }
+        }
         io.emit('deleted-todo', id)
     })
 })
