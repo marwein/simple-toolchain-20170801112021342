@@ -45,7 +45,7 @@
                 $(`#todo-list >li#${id}`).remove()
             })
 
-            $('#todo-form #submit').click(function () {
+            $('#todo-form #submit').click( () => {
                 var todo  = $('#newtodo').val()
                 socket.emit('new-todo', todo)
                 $('#newtodo').val('').focus()
