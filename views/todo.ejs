@@ -55,6 +55,9 @@
 
             socket.on('deleted-todo', (id)=>{
                 $(`#todo-list >li#${id}`).remove()
+                if ($(`#todo-list >li`).length === 0) {
+                    $('#todo-list').append('<li id="empty" class="list-group-item">Empty</li>')
+                }
             })
             
             $('#todo-form #newtodo').on('keyup', (event) => {
