@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Ma todolist</title>
+        <style>
+            a {text-decoration: none; color: black;}
+            #todo-list .todo-item .btn-delete {
+                cursor : pointer
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1>Ma todolist</h1>
+
+        <ul id="todo-list"></ul>
+
+        <div id="todo-form">
+            <p>
+                <label for="newtodo">Que dois-je faire ?</label>
+                <input type="text" name="newtodo" id="newtodo" autofocus />
+                <button type="submit" id="submit" >Ajouter</button>
+            </p>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('<%= protocole %>://<%= host %>:<%= port %>/');
+            
+            socket.on('new-client', (lastTodo) => {
+                if (lastTodo === null || lastTodo === undefined) {
+                    $('#todo-list').append('<li id="empty">Empty</li>')
+                } else {
+                    $('#todo-list').append(`<li id="${lastTodo.id}" class="todo-item"><span class="btn-delete" onclick="deleteTodo('${lastTodo.id}')">✘</span> ${lastTodo.text}</li>`)    
+                }
+            });
+
+            socket.on('new-added-todo', (todo) => {
+                $('#todo-list').append(`<li id="${todo.id}"><span onclick="deleteTodo('${todo.id}')">✘</span> ${todo.text}</li>`)
+            });
+
+            socket.on('deleted-todo', (id)=>{
+                $(`#todo-list >li#${id}`).remove()
+            })
+
+            $('#todo-form #submit').click(function () {
+                var todo  = $('#newtodo').val()
+                socket.emit('new-todo', todo)
+                $('#newtodo').val('').focus()
+                return false
+            });
+
+            deleteTodo = (id) => {
+                socket.emit('delete-todo', id)
+            }
+        </script>
+    </body>
+</html>
